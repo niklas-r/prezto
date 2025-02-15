@@ -28,10 +28,6 @@ export PATH=$HOME/.bin:$PATH
 
 prompt pure
 
-# Editor
-export VISUAL=nvim
-export EDITOR="$VISUAL"
-
 # Config
 export XDG_CONFIG_HOME=$HOME/.config
 
