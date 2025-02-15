@@ -11,3 +11,130 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
 fi
 
 # Customize to your needs...
+# Set up cache dir for ZSH for certain plguins to work, such as docker and kubectl
+export ZSH_CACHE_DIR=$HOME/.cache/zsh
+
+# Setup Antidote home dir
+export ANTIDOTE_HOME=$HOME/.cache/antidote
+
+# Source Antidote package manager
+source "${ZDOTDIR:-$HOME}/.antidote/antidote.zsh"
+
+# Initialize plugins statically with ${ZDOTDIR:-~}/.zsh_plugins.txt
+antidote load
+
+# PATH party
+export PATH=$HOME/.bin:$PATH
+
+prompt pure
+
+# Messy Ruby (do I need it?)
+# export PATH=$PATH:$HOME/.gem/ruby/2.6.0/bin
+#export PATH="/usr/local/opt/ruby/bin:$PATH"
+#export LDFLAGS="-L/usr/local/opt/ruby/lib"
+#export CPPFLAGS="-I/usr/local/opt/ruby/include"
+#export PKG_CONFIG_PATH="/usr/local/opt/ruby/lib/pkgconfig"
+
+# Editor
+export VISUAL=nvim
+export EDITOR="$VISUAL"
+
+# Config
+export XDG_CONFIG_HOME=$HOME/.config
+
+# Warp terminal
+export WARP_THEMES_DIR="$HOME/.warp/themes"
+
+# Bat
+export BAT_THEME="Catppuccin Frappe"
+
+# FZF config
+export FZF_CTRL_T_OPTS="
+  --preview 'bat --style numbers,changes --color=always {} | head -500'
+  --bind 'f2:change-preview-window(down|hidden|)'"
+
+# CONFIG PLUGINS
+GIT_AUTO_FETCH_INTERVAL=120 # in seconds
+
+# Aliases
+alias rmorig="find . -type f -name '*.orig' -exec rm {} \;"
+alias weather="curl wttr.in"
+
+alias git-squashed-delete='git checkout -q master && git for-each-ref refs/heads/ "--format=%(refname:short)" | while read branch; do mergeBase=$(git merge-base master $branch) && [[ $(git cherry master $(git commit-tree $(git rev-parse "$branch^{tree}") -p $mergeBase -m _)) == "-"* ]] && git branch -D $branch; done'
+alias git-squashed-delete-dry-run='git checkout -q master && git for-each-ref refs/heads/ "--format=%(refname:short)" | while read branch; do mergeBase=$(git merge-base master $branch) && [[ $(git cherry master $(git commit-tree $(git rev-parse "$branch^{tree}") -p $mergeBase -m _)) == "-"* ]] && echo "$branch is merged into master and can be deleted"; done'
+
+# List directories only
+alias ld='tree -d -CFL 1'
+
+# List directories first
+alias tre='tree --dirsfirst -CFL 1'
+
+# If you change repos in lazygit and want your shell to change directory into that repo on exiting lazygit
+lg()
+{
+    export LAZYGIT_NEW_DIR_FILE=~/.lazygit/newdir
+
+    lazygit "$@"
+
+    if [ -f $LAZYGIT_NEW_DIR_FILE ]; then
+            cd "$(cat $LAZYGIT_NEW_DIR_FILE)"
+            rm -f $LAZYGIT_NEW_DIR_FILE > /dev/null
+    fi
+}
+
+# Start Yazi and change directory if it returns a new directory
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
+
+# This allows use of ^ in command such as `git checkout HEAD^`
+# https://github.com/robbyrussell/oh-my-zsh/issues/449
+setopt NO_NOMATCH
+
+# NVM (node version manager)
+export NVM_DIR="$HOME/.config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# Source FZF
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# if wezterm exists, run wezterm shell-completion --shell zsh
+if command -v wezterm >/dev/null 2>&1; then
+  eval "$(wezterm shell-completion --shell zsh)"
+fi
+
+
+# if gh exists, add completions
+if command -v gh >/dev/null 2>&1; then
+  eval "$(gh completion -s zsh)"
+fi
+
+# Initiate zoxide (`z` command)
+eval "$(zoxide init zsh)"
+
+# Lets testing-library print a shit tonne of DOM information when a test fails.
+# Rendering SVG's in tests takes up a lot of characters.
+# Default limit is 7000 characters
+DEBUG_PRINT_LIMIT=20000
+
+# On Mac OS X, cd to the path of the front Finder window
+# Found at <http://brettterpstra.com/2013/02/09/quick-tip-jumping-to-the-finder-location-in-terminal>
+function cdf() {
+    target=$(osascript -e 'tell application "Finder" to if (count of Finder windows) > 0 then get POSIX path of (target of front Finder window as text)')
+    if [ "$target" != "" ]; then
+        cd "$target"
+        pwd
+    else
+        echo 'No Finder window found' >&2
+    fi
+}
+
+# Source secrets
+source "$HOME/.secret-vars"
+
