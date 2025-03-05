@@ -25,6 +25,8 @@ antidote load
 
 # PATH party
 export PATH=$HOME/.bin:$PATH
+# Add globally installed yarn packges to PATH
+PATH=$HOME/.yarn/bin:$PATH
 
 prompt pure
 
