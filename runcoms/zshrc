@@ -126,6 +126,15 @@ function cdf() {
     fi
 }
 
+# Use this to add a file or folder to the dotfiles repo and create a symlink
+# Usage: dotadd ~/.vimrc
+function dotadd() {
+  src="$1"
+  dest="$HOME/dotfiles/${2:-$(basename $src)}"
+  mv "$src" "$dest"
+  ln -s "$dest" "$src"
+  echo "Moved $src -> $dest and symlinked it back"
+}
 
 # Added by OrbStack: command-line tools and integration
 # This won't be added again if you remove it.
