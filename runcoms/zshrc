@@ -143,3 +143,7 @@ source ~/.orbstack/shell/init.zsh 2>/dev/null || :
 # Source secrets
 source "$HOME/.secret-vars"
 
+# Set up alias for GitHub Copilot CLI
+# ghce - Alias for explaining command
+# ghcs - Alias for suggesting command
+eval "$(gh copilot alias -- zsh)"
