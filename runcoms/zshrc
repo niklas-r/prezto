@@ -147,3 +147,10 @@ source "$HOME/.secret-vars"
 # ghce - Alias for explaining command
 # ghcs - Alias for suggesting command
 eval "$(gh copilot alias -- zsh)"
+
+# Atuin
+eval "$(atuin init zsh)"
+
+if command -v atuin >/dev/null 2>&1; then
+  eval "$(atuin gen-completions --shell zsh)"
+fi
