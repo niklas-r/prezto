@@ -130,7 +130,7 @@ function cdf() {
 # Usage: dotadd ~/.vimrc
 function dotadd() {
   src="$1"
-  dest="$HOME/dotfiles/${2:-$(basename $src)}"
+  dest="$HOME/dotfiles/config/${2:-$(basename $src)}"
   mv "$src" "$dest"
   ln -s "$dest" "$src"
   echo "Moved $src -> $dest and symlinked it back"
