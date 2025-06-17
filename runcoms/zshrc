@@ -154,3 +154,11 @@ eval "$(atuin init zsh)"
 if command -v atuin >/dev/null 2>&1; then
   eval "$(atuin gen-completions --shell zsh)"
 fi
+
+if command -v syft >/dev/null 2>&1; then
+  eval "$(syft completion zsh)"
+fi
+
+if command -v grype >/dev/null 2>&1; then
+  eval "$(grype completion zsh)"
+fi
