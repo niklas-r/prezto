@@ -173,6 +173,12 @@ function dotadd() {
 # Added by OrbStack: command-line tools and integration
 # This won't be added again if you remove it.
 source ~/.orbstack/shell/init.zsh 2>/dev/null || :
+if command -v orbctl >/dev/null 2>&1; then
+  eval "$(orbctl completion zsh)"
+fi
+if command -v docker >/dev/null 2>&1; then
+  eval "$(docker completion zsh)"
+fi
 
 # Source secrets
 source "$HOME/.secret-vars"
