@@ -126,14 +126,48 @@ function cdf() {
     fi
 }
 
-# Use this to add a file or folder to the dotfiles repo and create a symlink
-# Usage: dotadd ~/.vimrc
 function dotadd() {
+  local dry_run=false
+  local args=()
+  
+  # Parse arguments
+  while [[ $# -gt 0 ]]; do
+    case $1 in
+      --dry-run)
+        dry_run=true
+        shift
+        ;;
+      *)
+        args+=("$1")
+        shift
+        ;;
+    esac
+  done
+  
+  # Restore positional parameters
+  set -- "${args[@]}"
+  
+  if [[ -z "$1" ]]; then
+    echo "Usage: dotadd [--dry-run] <source_file> [destination_name]"
+    echo "Moves a file or folder to the dotfiles repo and creates a symlink"
+    echo "Options:"
+    echo "  --dry-run  Show what would be done without actually doing it"
+    echo "Example: dotadd ~/.vimrc"
+    echo "Example: dotadd --dry-run ~/.vimrc"
+    return 1
+  fi
+  
   src="$1"
   dest="$HOME/dotfiles/config/${2:-$(basename $src)}"
-  mv "$src" "$dest"
-  ln -s "$dest" "$src"
-  echo "Moved $src -> $dest and symlinked it back"
+  
+  if [[ "$dry_run" == true ]]; then
+    echo "[DRY RUN] Would move: $src -> $dest"
+    echo "[DRY RUN] Would create symlink: $dest -> $src"
+  else
+    mv "$src" "$dest"
+    ln -s "$dest" "$src"
+    echo "Moved $src -> $dest and symlinked it back"
+  fi
 }
 
 # Added by OrbStack: command-line tools and integration
