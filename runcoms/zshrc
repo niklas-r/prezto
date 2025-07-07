@@ -1,3 +1,10 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.config/zsh/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 #
 # Executes commands at the start of an interactive session.
 #
@@ -27,8 +34,6 @@ antidote load
 export PATH=$HOME/.bin:$PATH
 # Add globally installed yarn packges to PATH
 PATH=$HOME/.yarn/bin:$PATH
-
-prompt pure
 
 # Config
 export XDG_CONFIG_HOME=$HOME/.config
@@ -129,7 +134,7 @@ function cdf() {
 function dotadd() {
   local dry_run=false
   local args=()
-  
+
   # Parse arguments
   while [[ $# -gt 0 ]]; do
     case $1 in
@@ -143,10 +148,10 @@ function dotadd() {
         ;;
     esac
   done
-  
+
   # Restore positional parameters
   set -- "${args[@]}"
-  
+
   if [[ -z "$1" ]]; then
     echo "Usage: dotadd [--dry-run] <source_file> [destination_name]"
     echo "Moves a file or folder to the dotfiles repo and creates a symlink"
@@ -156,10 +161,10 @@ function dotadd() {
     echo "Example: dotadd --dry-run ~/.vimrc"
     return 1
   fi
-  
+
   src="$1"
   dest="$HOME/dotfiles/config/${2:-$(basename $src)}"
-  
+
   if [[ "$dry_run" == true ]]; then
     echo "[DRY RUN] Would move: $src -> $dest"
     echo "[DRY RUN] Would create symlink: $dest -> $src"
@@ -208,3 +213,5 @@ if command -v uv >/dev/null 2>&1; then
   eval "$(uvx --generate-shell-completion zsh)"
 fi
 
+# To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
+[[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
