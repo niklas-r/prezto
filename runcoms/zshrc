@@ -59,11 +59,13 @@ alias weather="curl wttr.in"
 alias git-squashed-delete='git checkout -q master && git for-each-ref refs/heads/ "--format=%(refname:short)" | while read branch; do mergeBase=$(git merge-base master $branch) && [[ $(git cherry master $(git commit-tree $(git rev-parse "$branch^{tree}") -p $mergeBase -m _)) == "-"* ]] && git branch -D $branch; done'
 alias git-squashed-delete-dry-run='git checkout -q master && git for-each-ref refs/heads/ "--format=%(refname:short)" | while read branch; do mergeBase=$(git merge-base master $branch) && [[ $(git cherry master $(git commit-tree $(git rev-parse "$branch^{tree}") -p $mergeBase -m _)) == "-"* ]] && echo "$branch is merged into master and can be deleted"; done'
 
-# List directories only
-alias ld='tree -d -CFL 1'
+alias ls='eza --group-directories-first --icons --classify'
 
-# List directories first
-alias tre='tree --dirsfirst -CFL 1'
+# List tree one level deep
+alias tre='ls --tree -L=1'
+
+# List directories only
+alias ld='tre -D'
 
 # If you change repos in lazygit and want your shell to change directory into that repo on exiting lazygit
 lg()
