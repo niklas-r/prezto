@@ -67,6 +67,11 @@ alias tre='ls --tree -L=1'
 # List directories only
 alias ld='tre -D'
 
+# Use bat, you can call builtin cat with `\cat`
+alias cat='bat'
+
+alias resource='source ~/.zshrc'
+
 # If you change repos in lazygit and want your shell to change directory into that repo on exiting lazygit
 lg()
 {
