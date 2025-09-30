@@ -182,12 +182,6 @@ function dotadd() {
   fi
 }
 
-# Added by OrbStack: command-line tools and integration
-# This won't be added again if you remove it.
-source ~/.orbstack/shell/init.zsh 2>/dev/null || :
-if command -v orbctl >/dev/null 2>&1; then
-  eval "$(orbctl completion zsh)"
-fi
 if command -v docker >/dev/null 2>&1; then
   eval "$(docker completion zsh)"
 fi
@@ -198,31 +192,21 @@ source "$HOME/.secret-vars"
 # Set up alias for GitHub Copilot CLI
 # ghce - Alias for explaining command
 # ghcs - Alias for suggesting command
-eval "$(gh copilot alias -- zsh)"
+if command -v gh >/dev/null 2>&1; then
+  eval "$(gh copilot alias -- zsh)"
+fi
 
 # Atuin
-eval "$(atuin init zsh)"
-
 if command -v atuin >/dev/null 2>&1; then
-  eval "$(atuin gen-completions --shell zsh)"
+  eval "$(atuin init zsh)"
 fi
-
-if command -v syft >/dev/null 2>&1; then
-  eval "$(syft completion zsh)"
-fi
-
-if command -v grype >/dev/null 2>&1; then
-  eval "$(grype completion zsh)"
-fi
-
-if command -v uv >/dev/null 2>&1; then
-  eval "$(uv generate-shell-completion zsh)"
-  eval "$(uvx --generate-shell-completion zsh)"
-fi
-
 
 if command -v pnpm >/dev/null 2>&1; then
   eval "$(pnpm completion zsh)"
+fi
+
+if command -v npm >/dev/null 2>&1; then
+  eval "$(npm completion)"
 fi
 
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
