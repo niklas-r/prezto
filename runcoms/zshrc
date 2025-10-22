@@ -56,6 +56,17 @@ GIT_AUTO_FETCH_INTERVAL=120 # in seconds
 alias rmorig="find . -type f -name '*.orig' -exec rm {} \;"
 alias weather="curl wttr.in"
 
+# Difftastic
+export DFT_TAB_WIDTH=2
+
+alias gdl="git -c diff.external=difft log -p --ext-diff"
+alias gdsh="git -c diff.external=difft show --ext-diff"
+alias gdf="git -c diff.external=difft diff"
+# Same as above but with inline diffs instead of side-by-side
+alias gdli="git -c diff.external='difft --display=inline' log -p --ext-diff"
+alias gdshi="git -c diff.external='difft --display=inline' show --ext-diff"
+alias gdfi="git -c diff.external='difft --display=inline' diff"
+
 alias git-squashed-delete='git checkout -q master && git for-each-ref refs/heads/ "--format=%(refname:short)" | while read branch; do mergeBase=$(git merge-base master $branch) && [[ $(git cherry master $(git commit-tree $(git rev-parse "$branch^{tree}") -p $mergeBase -m _)) == "-"* ]] && git branch -D $branch; done'
 alias git-squashed-delete-dry-run='git checkout -q master && git for-each-ref refs/heads/ "--format=%(refname:short)" | while read branch; do mergeBase=$(git merge-base master $branch) && [[ $(git cherry master $(git commit-tree $(git rev-parse "$branch^{tree}") -p $mergeBase -m _)) == "-"* ]] && echo "$branch is merged into master and can be deleted"; done'
 
