@@ -35,6 +35,9 @@ export DOTFILES_DIR=$HOME/dotfiles
 export PATH=$HOME/.bin:$PATH
 # Add globally installed yarn packges to PATH
 PATH=$HOME/.yarn/bin:$PATH
+# BUN
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
 
 # Config
 export XDG_CONFIG_HOME=$HOME/.config
@@ -238,3 +241,6 @@ zstyle ':completion:*:git:*' group-order 'main commands' 'alias commands' 'exter
 
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
 [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
+
+# bun completions
+[ -s "/Users/niklaskahn/.bun/_bun" ] && source "/Users/niklaskahn/.bun/_bun"
