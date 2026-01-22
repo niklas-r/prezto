@@ -2,7 +2,7 @@
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
 #
@@ -14,7 +14,7 @@ fi
 
 # Source Prezto.
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
-  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+    source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
 # Customize to your needs...
@@ -104,19 +104,19 @@ lg()
     lazygit "$@"
 
     if [ -f $LAZYGIT_NEW_DIR_FILE ]; then
-            cd "$(cat $LAZYGIT_NEW_DIR_FILE)"
-            rm -f $LAZYGIT_NEW_DIR_FILE > /dev/null
+        cd "$(cat $LAZYGIT_NEW_DIR_FILE)"
+        rm -f $LAZYGIT_NEW_DIR_FILE > /dev/null
     fi
 }
 
 # Start Yazi and change directory if it returns a new directory
 function y() {
-	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-	yazi "$@" --cwd-file="$tmp"
-	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-		builtin cd -- "$cwd"
-	fi
-	rm -f -- "$tmp"
+    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+    yazi "$@" --cwd-file="$tmp"
+    if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+        builtin cd -- "$cwd"
+    fi
+    rm -f -- "$tmp"
 }
 
 # This allows use of ^ in command such as `git checkout HEAD^`
@@ -133,13 +133,13 @@ export NVM_DIR="$HOME/.config/nvm"
 
 # if wezterm exists, run wezterm shell-completion --shell zsh
 if command -v wezterm >/dev/null 2>&1; then
-  eval "$(wezterm shell-completion --shell zsh)"
+    eval "$(wezterm shell-completion --shell zsh)"
 fi
 
 
 # if gh exists, add completions
 if command -v gh >/dev/null 2>&1; then
-  eval "$(gh completion -s zsh)"
+    eval "$(gh completion -s zsh)"
 fi
 
 # Initiate zoxide (`z` command)
@@ -163,51 +163,51 @@ function cdf() {
 }
 
 function dotadd() {
-  local dry_run=false
-  local args=()
+    local dry_run=false
+    local args=()
 
-  # Parse arguments
-  while [[ $# -gt 0 ]]; do
-    case $1 in
-      --dry-run)
-        dry_run=true
-        shift
-        ;;
-      *)
-        args+=("$1")
-        shift
-        ;;
-    esac
-  done
+    # Parse arguments
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            --dry-run)
+                dry_run=true
+                shift
+                ;;
+            *)
+                args+=("$1")
+                shift
+                ;;
+        esac
+    done
 
-  # Restore positional parameters
-  set -- "${args[@]}"
+    # Restore positional parameters
+    set -- "${args[@]}"
 
-  if [[ -z "$1" ]]; then
-    echo "Usage: dotadd [--dry-run] <source_file> [destination_name]"
-    echo "Moves a file or folder to the dotfiles repo and creates a symlink"
-    echo "Options:"
-    echo "  --dry-run  Show what would be done without actually doing it"
-    echo "Example: dotadd ~/.vimrc"
-    echo "Example: dotadd --dry-run ~/.vimrc"
-    return 1
-  fi
+    if [[ -z "$1" ]]; then
+        echo "Usage: dotadd [--dry-run] <source_file> [destination_name]"
+        echo "Moves a file or folder to the dotfiles repo and creates a symlink"
+        echo "Options:"
+        echo "  --dry-run  Show what would be done without actually doing it"
+        echo "Example: dotadd ~/.vimrc"
+        echo "Example: dotadd --dry-run ~/.vimrc"
+        return 1
+    fi
 
-  src="$1"
-  dest="$HOME/dotfiles/config/${2:-$(basename $src)}"
+    src="$1"
+    dest="$HOME/dotfiles/config/${2:-$(basename $src)}"
 
-  if [[ "$dry_run" == true ]]; then
-    echo "[DRY RUN] Would move: $src -> $dest"
-    echo "[DRY RUN] Would create symlink: $dest -> $src"
-  else
-    mv "$src" "$dest"
-    ln -s "$dest" "$src"
-    echo "Moved $src -> $dest and symlinked it back"
-  fi
+    if [[ "$dry_run" == true ]]; then
+        echo "[DRY RUN] Would move: $src -> $dest"
+        echo "[DRY RUN] Would create symlink: $dest -> $src"
+    else
+        mv "$src" "$dest"
+        ln -s "$dest" "$src"
+        echo "Moved $src -> $dest and symlinked it back"
+    fi
 }
 
 if command -v docker >/dev/null 2>&1; then
-  eval "$(docker completion zsh)"
+    eval "$(docker completion zsh)"
 fi
 
 # Source secrets
@@ -217,20 +217,25 @@ source "$HOME/.secret-vars"
 # ghce - Alias for explaining command
 # ghcs - Alias for suggesting command
 if command -v gh >/dev/null 2>&1; then
-  eval "$(gh copilot alias -- zsh)"
+    eval "$(gh copilot alias -- zsh)"
 fi
 
 # Atuin
 if command -v atuin >/dev/null 2>&1; then
-  eval "$(atuin init zsh)"
+    eval "$(atuin init zsh)"
 fi
 
 if command -v pnpm >/dev/null 2>&1; then
-  eval "$(pnpm completion zsh)"
+    eval "$(pnpm completion zsh)"
 fi
 
 if command -v npm >/dev/null 2>&1; then
-  eval "$(npm completion)"
+    eval "$(npm completion)"
+fi
+
+
+if command -v opencode >/dev/null 2>&1; then
+    eval "$(opencode completion)"
 fi
 
 # Disable "zsh: do you with to see all NNN possibilities?"
@@ -240,7 +245,7 @@ zstyle ':completion:*:default' select-prompt ''
 bindkey -M menuselect '^xi' vi-insert
 
 if command -v moor >/dev/null 2>&1; then
-  export PAGER='moor'
+    export PAGER='moor'
 fi
 
 export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense' # optional
