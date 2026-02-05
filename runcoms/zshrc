@@ -147,27 +147,6 @@ function y() {
 # https://github.com/robbyrussell/oh-my-zsh/issues/449
 setopt NO_NOMATCH
 
-# fnm - Fast Node Manager (replaces NVM)
-if command -v fnm >/dev/null 2>&1; then
-    _cache_completion "fnm" "fnm env --use-on-cd"
-fi
-
-# if wezterm exists, run wezterm shell-completion --shell zsh
-if command -v wezterm >/dev/null 2>&1; then
-    _cache_completion "wezterm" "wezterm shell-completion --shell zsh"
-fi
-
-
-# if gh exists, add completions
-if command -v gh >/dev/null 2>&1; then
-    _cache_completion "gh" "gh completion -s zsh"
-fi
-
-# Initiate zoxide (`z` command)
-if command -v zoxide >/dev/null 2>&1; then
-    _cache_completion "zoxide" "zoxide init zsh"
-fi
-
 # Lets testing-library print a shit tonne of DOM information when a test fails.
 # Rendering SVG's in tests takes up a lot of characters.
 # Default limit is 7000 characters
@@ -229,18 +208,11 @@ function dotadd() {
     fi
 }
 
-if command -v docker >/dev/null 2>&1; then
-    _cache_completion "docker" "docker completion zsh"
-fi
-
 # Source secrets
 source "$HOME/.secret-vars"
 
-# Set up alias for GitHub Copilot CLI
-# ghce - Alias for explaining command
-# ghcs - Alias for suggesting command
-if command -v gh >/dev/null 2>&1; then
-    _cache_completion "gh-copilot" "gh copilot alias -- zsh"
+if command -v docker >/dev/null 2>&1; then
+    _cache_completion "docker" "docker completion zsh"
 fi
 
 if command -v pnpm >/dev/null 2>&1; then
@@ -256,6 +228,15 @@ if command -v opencode >/dev/null 2>&1; then
     _cache_completion "opencode" "opencode completion"
 fi
 
+if command -v fnm >/dev/null 2>&1; then
+    _cache_completion "fnm" "fnm env --use-on-cd"
+fi
+
+# Initiate zoxide (`z` command)
+if command -v zoxide >/dev/null 2>&1; then
+    _cache_completion "zoxide" "zoxide init zsh"
+fi
+
 # Disable "zsh: do you with to see all NNN possibilities?"
 zstyle ':completion:*:default' list-prompt ''
 zstyle ':completion:*:default' select-prompt ''
@@ -268,7 +249,6 @@ fi
 
 export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense' # optional
 zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
-_cache_completion "carapace" "carapace _carapace"
 zstyle ':completion:*:git:*' group-order 'main commands' 'alias commands' 'external commands'
 
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
