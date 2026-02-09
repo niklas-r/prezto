@@ -57,7 +57,7 @@ _cache_completion() {
 
     # Regenerate if missing or older than 24 hours
     if [[ ! -f "$cache_file" || $(find "$cache_file" -mtime +1 2>/dev/null) ]]; then
-        eval "$gen_cmd" > "$cache_file" 2>/dev/null
+        eval "$gen_cmd" >| "$cache_file" 2>/dev/null
     fi
 
     [[ -f "$cache_file" ]] && source "$cache_file"
