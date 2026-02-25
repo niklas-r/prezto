@@ -211,6 +211,9 @@ function dotadd() {
 # Source secrets
 source "$HOME/.secret-vars"
 
+# Source AI helper functions
+[[ -f "${ZDOTDIR:-$HOME}/.zprezto/scripts/ai.zsh" ]] && source "${ZDOTDIR:-$HOME}/.zprezto/scripts/ai.zsh"
+
 if command -v docker >/dev/null 2>&1; then
     _cache_completion "docker" "docker completion zsh"
 fi

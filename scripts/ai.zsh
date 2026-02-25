@@ -1,0 +1,95 @@
+#
+# AI-powered shell helpers using GitHub Copilot CLI
+#
+
+function ghcs() {
+    if [[ -z "$*" ]]; then
+        echo "Usage: ghcs <natural language description>"
+        echo "Example: ghcs 'find all .ts files modified in the last 24 hours'"
+        return 1
+    fi
+
+    if ! command -v copilot >/dev/null 2>&1; then
+        echo "Error: copilot CLI not found" >&2
+        return 1
+    fi
+
+    local prompt="Suggest a single shell command that fulfills the following request."
+    prompt+="\nOutput ONLY a fenced code block with the command, nothing else. No explanation."
+    prompt+="\nSystem: {\"platform\": \"$(uname -s)\", \"architecture\": \"$(uname -m)\"}"
+    prompt+="\nRequest: $*"
+
+    echo "Thinking..."
+    local response
+    if ! response=$(copilot -s -p "$prompt" 2>&1); then
+        echo "Error: copilot command failed" >&2
+        echo "$response" >&2
+        return 1
+    fi
+
+    # Extract command from markdown code block (```bash ... ``` or ``` ... ```)
+    local cmd
+    cmd=$(echo "$response" | awk '/^```/{if(f){exit}f=1;next}f{print}')
+
+    if [[ -z "$cmd" ]]; then
+        echo "Could not extract a command from the response:" >&2
+        echo "$response" >&2
+        return 1
+    fi
+
+    echo ""
+    echo "  \e[1;36m$cmd\e[0m"
+    echo ""
+    echo "  \e[2m[c]\e[0m Copy to clipboard"
+    echo "  \e[2m[e]\e[0m Execute \e[33m(review carefully!)\e[0m"
+    echo "  \e[2m[q]\e[0m Cancel"
+    echo ""
+
+    local choice
+    read -sk 1 "choice?"
+
+    case "$choice" in
+        c)
+            echo -n "$cmd" | pbcopy
+            echo "Copied to clipboard."
+            ;;
+        e)
+            # Add to shell history so it shows up in arrow-up recall
+            print -s "$cmd"
+            echo "\e[2mExecuting: $cmd\e[0m"
+            echo ""
+            eval "$cmd"
+            ;;
+        *)
+            echo "Cancelled."
+            ;;
+    esac
+}
+
+function ghce() {
+    if [[ -z "$*" ]]; then
+        echo "Usage: ghce <command>"
+        echo "Example: ghce 'du -sh .'"
+        return 1
+    fi
+
+    if ! command -v copilot >/dev/null 2>&1; then
+        echo "Error: copilot CLI not found" >&2
+        return 1
+    fi
+
+    local prompt="Explain the following shell command in plain English. Be concise but thorough."
+    prompt+="\nBreak down each flag and argument."
+    prompt+="\nCommand: $*"
+
+    echo "Thinking..."
+    local response
+    if ! response=$(copilot -s -p "$prompt" 2>&1); then
+        echo "Error: copilot command failed" >&2
+        echo "$response" >&2
+        return 1
+    fi
+
+    echo ""
+    echo "$response"
+}
