@@ -2,6 +2,24 @@
 # AI-powered shell helpers using GitHub Copilot CLI
 #
 
+_ai_spinner() {
+    local frames=('⠋' '⠙' '⠹' '⠸' '⠼' '⠴' '⠦' '⠧' '⠇' '⠏')
+    local i=0
+    tput civis  # hide cursor
+    while true; do
+        printf '\r  \e[36m%s\e[0m \e[2mThinking...\e[0m' "${frames[$((i % ${#frames[@]} + 1))]}"
+        i=$((i + 1))
+        sleep 0.08
+    done
+}
+
+_ai_spinner_stop() {
+    kill "$1" 2>/dev/null
+    wait "$1" 2>/dev/null
+    printf '\r\033[K'  # clear spinner line
+    tput cnorm  # restore cursor
+}
+
 function ghcs() {
     if [[ -z "$*" ]]; then
         echo "Usage: ghcs <natural language description>"
@@ -19,13 +37,18 @@ function ghcs() {
     prompt+="\nSystem: {\"platform\": \"$(uname -s)\", \"architecture\": \"$(uname -m)\"}"
     prompt+="\nRequest: $*"
 
-    echo "Thinking..."
+    setopt local_options no_monitor  # suppress job control messages from background spinner
+
+    _ai_spinner &
+    local spinner_pid=$!
     local response
     if ! response=$(copilot -s -p "$prompt" 2>&1); then
+        _ai_spinner_stop $spinner_pid
         echo "Error: copilot command failed" >&2
         echo "$response" >&2
         return 1
     fi
+    _ai_spinner_stop $spinner_pid
 
     # Extract command from markdown code block (```bash ... ``` or ``` ... ```)
     local cmd
@@ -82,13 +105,18 @@ function ghce() {
     prompt+="\nBreak down each flag and argument."
     prompt+="\nCommand: $*"
 
-    echo "Thinking..."
+    setopt local_options no_monitor  # suppress job control messages from background spinner
+
+    _ai_spinner &
+    local spinner_pid=$!
     local response
     if ! response=$(copilot -s -p "$prompt" 2>&1); then
+        _ai_spinner_stop $spinner_pid
         echo "Error: copilot command failed" >&2
         echo "$response" >&2
         return 1
     fi
+    _ai_spinner_stop $spinner_pid
 
     echo ""
     echo "$response"
