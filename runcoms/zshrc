@@ -39,7 +39,7 @@ source ${zsh_plugins}.zsh
 
 # PATH party
 export DOTFILES_DIR=$HOME/dotfiles
-export PATH=$HOME/.bin:$PATH
+export PATH=$HOME/.bin:$HOME/.local/bin:$PATH
 # Add globally installed yarn packges to PATH
 PATH=$HOME/.yarn/bin:$PATH
 # BUN
@@ -226,6 +226,10 @@ fi
 # Initiate zoxide (`z` command)
 if command -v zoxide >/dev/null 2>&1; then
     _cache_completion "zoxide" "zoxide init zsh"
+fi
+
+if command -v pipx >/dev/null 2>&1; then
+    _cache_completion "pipx" "register-python-argcomplete pipx"
 fi
 
 # Disable "zsh: do you with to see all NNN possibilities?"
