@@ -42,7 +42,7 @@ function ghcs() {
     _ai_spinner &
     local spinner_pid=$!
     local response
-    if ! response=$(copilot -s -p "$prompt" 2>&1); then
+    if ! response=$(copilot --model="claude-haiku-4.5" -s -p "$prompt" 2>&1); then
         _ai_spinner_stop $spinner_pid
         echo "Error: copilot command failed" >&2
         echo "$response" >&2
@@ -110,7 +110,7 @@ function ghce() {
     _ai_spinner &
     local spinner_pid=$!
     local response
-    if ! response=$(copilot -s -p "$prompt" 2>&1); then
+    if ! response=$(copilot --model="claude-haiku-4.5" -s -p "$prompt" 2>&1); then
         _ai_spinner_stop $spinner_pid
         echo "Error: copilot command failed" >&2
         echo "$response" >&2
